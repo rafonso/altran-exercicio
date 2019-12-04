@@ -40,7 +40,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id) {
         return userRepository.findById(id)
-                .map(todo -> ResponseEntity.ok().body(todo))
+                .map(user -> ResponseEntity.ok().body(user))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -51,8 +51,8 @@ public class UserController {
                     .map(u -> {
                         u.setEmail(user.getEmail());
                         u.setName(user.getName());
-                        User uSalvo = userRepository.save(u);
-                        return ResponseEntity.ok().body(uSalvo);
+                        User savedUser = userRepository.save(u);
+                        return ResponseEntity.ok().body(savedUser);
                     })
                     .orElse(ResponseEntity.notFound().build());
         } catch (DuplicateKeyException e) {
@@ -61,9 +61,9 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteTodo(@PathVariable("id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return userRepository.findById(id)
-                .map(todo -> {
+                .map(user -> {
                     userRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
