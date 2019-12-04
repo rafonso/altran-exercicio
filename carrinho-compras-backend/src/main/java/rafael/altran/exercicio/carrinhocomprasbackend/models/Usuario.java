@@ -22,7 +22,7 @@ public class Usuario {
     @Size(max=100)
     @Email(message = "Email Inválido")
     @Indexed(unique=true)
-    private String title;
+    private String email;
 
     @NotBlank
     @Size(max=100)
