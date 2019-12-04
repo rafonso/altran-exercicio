@@ -11,22 +11,22 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-@Document(collection="usuarios")
+@Document(collection="users")
 @EqualsAndHashCode(of = "id")
-public class Usuario {
+public class User {
 
     @Id
     private Long id;
 
     @NotBlank
     @Size(max=100)
-    @Email(message = "Email Inválido")
+    @Email(message = "Invalid Email")
     @Indexed(unique=true)
     private String email;
 
     @NotBlank
     @Size(max=100)
-    private String nome;
+    private String name;
 
 
 

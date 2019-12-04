@@ -1,7 +1,7 @@
 package rafael.altran.exercicio.carrinhocomprasbackend.models;
 
-public enum StatusCarrinho {
+public enum CartStatus {
 
-    ABERTO, FECHADO
+    OPEN, CLOSED
 
 }

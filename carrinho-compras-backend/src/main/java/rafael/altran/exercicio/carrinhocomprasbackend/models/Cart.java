@@ -9,18 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Document(collection="carrinhos")
+@Document(collection="carts")
 @EqualsAndHashCode(of = "id")
-public class Carrinho {
+public class Cart {
 
     @Id
     private Long id;
 
-    private Usuario usuario;
+    private User user;
 
-    private List<Item> itens = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
-    private StatusCarrinho status = StatusCarrinho.ABERTO;
+    private CartStatus status = CartStatus.OPEN;
 
 
 

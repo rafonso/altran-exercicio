@@ -7,64 +7,64 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import rafael.altran.exercicio.carrinhocomprasbackend.models.Usuario;
-import rafael.altran.exercicio.carrinhocomprasbackend.repositories.UsuarioRepository;
+import rafael.altran.exercicio.carrinhocomprasbackend.models.User;
+import rafael.altran.exercicio.carrinhocomprasbackend.repositories.UserRepository;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/carrinho/usuario")
+@RequestMapping("/shopping/user")
 @CrossOrigin("*")
-public class UsuarioController {
+public class UserController {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/")
-    public List<Usuario> getAll() {
+    public List<User> getAll() {
         Sort sortByEmail = new Sort(Sort.Direction.ASC, "email");
-        return usuarioRepository.findAll(sortByEmail);
+        return userRepository.findAll(sortByEmail);
     }
 
     @PostMapping("/")
-    public Usuario create(@Valid @RequestBody Usuario usuario) {
+    public User create(@Valid @RequestBody User user) {
         try {
-            usuario.setId(System.currentTimeMillis());
-            return usuarioRepository.save(usuario);
+            user.setId(System.currentTimeMillis());
+            return userRepository.save(user);
         } catch (DuplicateKeyException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já cadasrado", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail already registered", e);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getById(@PathVariable("id") Long id) {
-        return usuarioRepository.findById(id)
+    public ResponseEntity<User> getById(@PathVariable("id") Long id) {
+        return userRepository.findById(id)
                 .map(todo -> ResponseEntity.ok().body(todo))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Usuario> update(@PathVariable("id") Long id, @Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<User> update(@PathVariable("id") Long id, @Valid @RequestBody User user) {
         try {
-            return usuarioRepository.findById(id)
+            return userRepository.findById(id)
                     .map(u -> {
-                        u.setEmail(usuario.getEmail());
-                        u.setNome(usuario.getNome());
-                        Usuario uSalvo = usuarioRepository.save(u);
+                        u.setEmail(user.getEmail());
+                        u.setName(user.getName());
+                        User uSalvo = userRepository.save(u);
                         return ResponseEntity.ok().body(uSalvo);
                     })
                     .orElse(ResponseEntity.notFound().build());
         } catch (DuplicateKeyException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email já cadasrado para outro usuário", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail already registered to another User", e);
         }
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteTodo(@PathVariable("id") Long id) {
-        return usuarioRepository.findById(id)
+        return userRepository.findById(id)
                 .map(todo -> {
-                    usuarioRepository.deleteById(id);
+                    userRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }

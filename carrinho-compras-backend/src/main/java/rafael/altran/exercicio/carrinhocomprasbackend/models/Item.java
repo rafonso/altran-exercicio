@@ -20,9 +20,9 @@ public class Item {
 
     @NotBlank
     @Size(max=100)
-    private String nome;
+    private String name;
 
     @Positive
-    private BigDecimal valor;
+    private BigDecimal value;
 
 }
