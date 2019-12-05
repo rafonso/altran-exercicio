@@ -27,21 +27,22 @@ public class UserController {
         return userRepository.findAll(sortByEmail);
     }
 
-    @PostMapping("/")
-    public User create(@Valid @RequestBody User user) {
-        try {
-            user.setId(System.currentTimeMillis());
-            return userRepository.save(user);
-        } catch (DuplicateKeyException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail already registered", e);
-        }
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id) {
         return userRepository.findById(id)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping(value = "/", produces = "application/json")
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+        try {
+            user.setId(System.currentTimeMillis());
+            User savedUser = userRepository.save(user);
+            return ResponseEntity.ok().body(savedUser);
+        } catch (DuplicateKeyException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail already registered", e);
+        }
     }
 
     @PutMapping(value = "/{id}")
