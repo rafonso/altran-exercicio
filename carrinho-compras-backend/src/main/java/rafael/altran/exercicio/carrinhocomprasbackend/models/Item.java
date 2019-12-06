@@ -1,7 +1,9 @@
 package rafael.altran.exercicio.carrinhocomprasbackend.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,8 +13,10 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Data
-@Document(collection="itens")
+@Document(collection="items")
 @EqualsAndHashCode(of = "id")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 
     @Id

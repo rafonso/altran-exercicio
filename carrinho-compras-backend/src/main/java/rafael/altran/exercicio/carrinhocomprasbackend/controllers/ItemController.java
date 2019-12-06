@@ -1,11 +1,8 @@
 package rafael.altran.exercicio.carrinhocomprasbackend.controllers;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import rafael.altran.exercicio.carrinhocomprasbackend.models.Item;
 import rafael.altran.exercicio.carrinhocomprasbackend.repositories.ItemRepository;
 
@@ -29,12 +26,6 @@ public class ItemController {
         return itemRepository.findAll(sortByName);
     }
 
-    @PostMapping("/")
-    public Item create(@Valid @RequestBody Item item) {
-        item.setId(System.currentTimeMillis());
-        return itemRepository.save(item);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Item> getById(@PathVariable("id") Long id) {
         return itemRepository.findById(id)
@@ -42,20 +33,22 @@ public class ItemController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/")
+    public Item create(@Valid @RequestBody Item item) {
+        item.setId(System.currentTimeMillis());
+        return itemRepository.save(item);
+    }
+
     @PutMapping(value = "/{id}")
     public ResponseEntity<Item> update(@PathVariable("id") Long id, @Valid @RequestBody Item item) {
-        try {
-            return itemRepository.findById(id)
-                    .map(i -> {
-                        i.setValue(item.getValue());
-                        i.setName(item.getName());
-                        Item savedItem = itemRepository.save(i);
-                        return ResponseEntity.ok().body(savedItem);
-                    })
-                    .orElse(ResponseEntity.notFound().build());
-        } catch (DuplicateKeyException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail already registered to another Item", e);
-        }
+        return itemRepository.findById(id)
+                .map(i -> {
+                    i.setValue(item.getValue());
+                    i.setName(item.getName());
+                    Item savedItem = itemRepository.save(i);
+                    return ResponseEntity.ok().body(savedItem);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping(value = "/{id}")
