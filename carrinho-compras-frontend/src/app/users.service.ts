@@ -15,9 +15,9 @@ export class UsersService {
     const obj = {
       email: userEmail, name: userName
     };
-    console.log(obj);
-    this.http.post(`${this.uri}`, obj)
-      .subscribe(res => console.log(`Added User: ${res.toString()}`));
+    return this.http.post(`${this.uri}`, obj)
+      // .subscribe(res => console.log('User Added'))
+    ;
   }
 
   getUsers() {
@@ -32,8 +32,7 @@ export class UsersService {
     const obj = {
       email: userEmail, name: userName
     };
-    this.http.put(`${this.uri}${id}`, obj)
-      .subscribe(res => console.log(`Updated User: ${res.toString()}`));
+    return this.http.put(`${this.uri}${id}`, obj);
   }
 
   deleteUser(id) {

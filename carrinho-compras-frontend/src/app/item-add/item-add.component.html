@@ -1,4 +1,7 @@
 <div class="card">
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
   <div class="card-body">
     <form [formGroup]="angForm" novalidate>
       <div class="form-group">

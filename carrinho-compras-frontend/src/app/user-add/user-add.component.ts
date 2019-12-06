@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup,  FormBuilder,  Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {UsersService} from '../users.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-add',
@@ -9,20 +10,32 @@ import {UsersService} from '../users.service';
 })
 export class UserAddComponent implements OnInit {
 
+  error: string;
   angForm: FormGroup;
-  constructor(private fb: FormBuilder, private usersService: UsersService) {
+
+  constructor(private router: Router, private fb: FormBuilder, private usersService: UsersService) {
     this.createForm();
   }
 
   createForm() {
+    this.error = null;
     this.angForm = this.fb.group({
       userEmail: ['', Validators.compose([Validators.required, Validators.email])],
-      userName: ['', Validators.required ]
+      userName: ['', Validators.required]
     });
   }
 
   addUser(userEmail, userName) {
-    this.usersService.addUser(userEmail, userName);
+    this.error = null;
+    this.usersService.addUser(userEmail, userName)
+      .subscribe(
+        data => {
+          this.router.navigate(['users'], {state: {data: 'User Added with success'}} );
+        },
+        err => {
+          this.error = err.error.message;
+        }
+      );
   }
 
   ngOnInit() {

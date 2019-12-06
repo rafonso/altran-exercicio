@@ -15,9 +15,7 @@ export class ItemsService {
     const obj = {
       name: itemName, value: itemValue
     };
-    console.log(obj);
-    this.http.post(`${this.uri}`, obj)
-      .subscribe(res => console.log(`Added Item: ${res.toString()}`));
+    return this.http.post(`${this.uri}`, obj);
   }
 
   getItems() {
@@ -32,8 +30,7 @@ export class ItemsService {
     const obj = {
       name: itemName, value: itemValue
     };
-    this.http.put(`${this.uri}${id}`, obj)
-      .subscribe(res => console.log(`Updated Item: ${res.toString()}`));
+    return this.http.put(`${this.uri}${id}`, obj);
   }
 
   deleteItem(id) {
