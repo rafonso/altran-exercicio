@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="angForm" novalidate>
+      <div class="form-group">
+        <label class="col-md-4">User Email</label>
+        <input type="email" class="form-control" formControlName="userEmail"
+               #userEmail/>
+      </div>
+      <div
+        *ngIf="angForm.controls['userEmail'].invalid && (angForm.controls['userEmail'].dirty || angForm.controls['userEmail'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="angForm.controls['userEmail'].errors.required || angForm.controls['userEmail'].errors.email">
+          A valid User Email is required.
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4">User Name </label>
+        <input type="text" class="form-control" formControlName="userName"
+               #userName/>
+      </div>
+      <div
+        *ngIf="angForm.controls['userName'].invalid && (angForm.controls['userName'].dirty || angForm.controls['userName'].touched)"
+        class="alert alert-danger">
+        <div *ngIf="angForm.controls['userName'].errors.required">
+          A valid User Name is required.
+        </div>
+      </div>
+      <div class="form-group">
+        <button
+          (click)="addUser(userEmail.value, userName.value)"
+          type="submit" class="btn btn-primary" [disabled]="angForm.pristine || angForm.invalid">Create User
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

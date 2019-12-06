@@ -1,2 +1,8 @@
 # altran-exercicio
- Exercício para Altran
+Altran exercise
+
+#Usage
+- Backend:
+- Frontend:
+
+
