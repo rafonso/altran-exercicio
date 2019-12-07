@@ -1,0 +1,29 @@
+<div *ngIf="message" class="alert alert-success" role="alert">
+  {{ message }}
+</div>
+<div *ngIf="error" class="alert alert-danger" role="alert">
+  {{ error }}
+</div>
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th>Cart Id</th>
+    <th>User</th>
+    <th>Total Value</th>
+    <th>Status</th>
+    <th colspan="2">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let cart of carts">
+    <td>{{ cart.id }}</td>
+    <td>{{ cart.user.email }} ({{ cart.user.name }})</td>
+    <td style="text-align: right">{{cart.cartValue| number: '.2-2'}}</td>
+    <td>{{cart.status}}</td>
+    <td><a [routerLink]="['../cart/edit', cart.id]" class="btn btn-primary">
+      {{cart.status == 'OPEN' ? 'Edit' : 'View'}}
+    </a></td>
+    <td><a (click)="deleteCart(cart.id)" class="btn btn-danger">Delete</a></td>
+  </tr>
+  </tbody>
+</table>

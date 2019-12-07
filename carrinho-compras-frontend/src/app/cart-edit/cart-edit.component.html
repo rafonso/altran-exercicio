@@ -1,0 +1,55 @@
+<div *ngIf="message" class="alert alert-success" role="alert">
+  {{ message }}
+</div>
+<div *ngIf="error" class="alert alert-danger" role="alert">
+  {{ error }}
+</div>
+<div class="card">
+  <div class="card-body">
+    <div>
+      <label class="col-md-4">User: </label>
+      <input type="text" class="form-control" readonly *ngIf="cart.user"
+             value="{{cart.user.name}} ({{cart.user.email}})">
+      <label class="col-md-4">Status: </label>
+      <input type="text" class="form-control" readonly *ngIf="cart.status"
+             value="{{cart.status}}">
+    </div>
+  </div>
+
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <td colspan="6" style="text-align: right" *ngIf="cart.status === 'OPEN'">
+        <a class="btn btn-primary">
+          Add Item
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <th>Item Name</th>
+      <th>Item Value</th>
+      <th>Item Quantity</th>
+      <th>Subtotal</th>
+      <th colspan="2" *ngIf="cart.status === 'OPEN'" >Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let cartItem of cart.cartItems">
+      <td>{{ cartItem.item.name }}</td>
+      <td style="text-align: right">{{cartItem.item.value| number: '.2-2'}}</td>
+      <td style="text-align: right">{{cartItem.quantity}}</td>
+      <td style="text-align: right">{{cartItem.itemValue| number: '.2-2'}}</td>
+      <td *ngIf="cart.status === 'OPEN'" ><a class="btn btn-primary">Edit</a></td>
+      <td *ngIf="cart.status === 'OPEN'" ><a class="btn btn-danger">Delete</a></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <th colspan="3" style="text-align: right">Total:</th>
+    <td style="text-align: right">{{cart.cartValue | number: '.2-2'}}</td>
+    </tfoot>
+  </table>
+  <div class="form-group text-right">
+    <a [routerLink]="['/carts']" class="btn btn-primary mr-2"> Return to Carts </a>
+    <button (click)="closeCart(cart.id)" *ngIf="cart.status === 'OPEN'" class="btn btn-success ml-2">Close Cart</button>
+  </div>
+</div>

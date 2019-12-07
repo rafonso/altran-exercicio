@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ItemsService} from '../items.service';
 import {Router} from '@angular/router';
+import {User} from '../user';
 
 @Component({
   selector: 'app-item-add',

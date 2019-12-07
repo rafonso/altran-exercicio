@@ -13,6 +13,9 @@ import {UserEditComponent} from './user-edit/user-edit.component';
 import { ItemAddComponent } from './item-add/item-add.component';
 import { ItemGetComponent } from './item-get/item-get.component';
 import { ItemEditComponent } from './item-edit/item-edit.component';
+import { CartAddComponent } from './cart-add/cart-add.component';
+import { CartGetComponent } from './cart-get/cart-get.component';
+import { CartEditComponent } from './cart-edit/cart-edit.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { ItemEditComponent } from './item-edit/item-edit.component';
     UserEditComponent,
     ItemAddComponent,
     ItemGetComponent,
-    ItemEditComponent
+    ItemEditComponent,
+    CartAddComponent,
+    CartGetComponent,
+    CartEditComponent
   ],
   imports: [
     BrowserModule,

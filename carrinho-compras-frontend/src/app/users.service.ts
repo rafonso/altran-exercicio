@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {User} from './user';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class UsersService {
   }
 
   getUsers() {
-    return this.http.get(this.uri);
+    return this.http.get<User[]>(this.uri);
   }
 
   editUser(id) {

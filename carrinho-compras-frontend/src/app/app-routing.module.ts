@@ -1,12 +1,14 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { UserAddComponent } from './user-add/user-add.component';
-import { UserEditComponent } from './user-edit/user-edit.component';
-import { UserGetComponent } from './user-get/user-get.component';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {UserAddComponent} from './user-add/user-add.component';
+import {UserEditComponent} from './user-edit/user-edit.component';
+import {UserGetComponent} from './user-get/user-get.component';
 import {ItemAddComponent} from './item-add/item-add.component';
 import {ItemEditComponent} from './item-edit/item-edit.component';
 import {ItemGetComponent} from './item-get/item-get.component';
-
+import {CartAddComponent} from './cart-add/cart-add.component';
+import {CartEditComponent} from './cart-edit/cart-edit.component';
+import {CartGetComponent} from './cart-get/cart-get.component';
 
 
 const routes: Routes = [
@@ -33,10 +35,24 @@ const routes: Routes = [
   {
     path: 'items',
     component: ItemGetComponent
+  },
+  {
+    path: 'cart/create',
+    component: CartAddComponent
+  },
+  {
+    path: 'cart/edit/:id',
+    component: CartEditComponent
+  },
+  {
+    path: 'carts',
+    component: CartGetComponent
   }
 ];
+
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
