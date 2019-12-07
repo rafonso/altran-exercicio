@@ -32,7 +32,7 @@ export class UserGetComponent implements OnInit {
   deleteUser(id) {
     this.usersService.deleteUser(id)
       .subscribe(
-        data => {
+        () => {
           this.fillUsers();
           this.message = 'User Removed with success';
         },

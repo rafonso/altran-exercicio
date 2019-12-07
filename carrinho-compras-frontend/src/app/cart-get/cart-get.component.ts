@@ -38,7 +38,7 @@ export class CartGetComponent implements OnInit {
   deleteCart(id) {
     this.cartsService.deleteCart(id)
       .subscribe(
-        data => {
+        () => {
           this.fillCarts();
           this.message = 'Cart Removed with success';
         },

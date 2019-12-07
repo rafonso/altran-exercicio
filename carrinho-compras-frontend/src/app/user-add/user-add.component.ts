@@ -29,7 +29,8 @@ export class UserAddComponent implements OnInit {
     this.error = null;
     this.usersService.addUser(userEmail, userName)
       .subscribe(
-        data => {
+        () => {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['users'], {state: {data: 'User Added with success'}} );
         },
         err => {

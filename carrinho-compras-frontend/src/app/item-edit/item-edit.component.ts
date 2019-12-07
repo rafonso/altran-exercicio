@@ -29,7 +29,8 @@ export class ItemEditComponent implements OnInit {
     this.error = null;
     this.route.params.subscribe(params => {
       this.itemsService.updateItem(itemName, itemValue, params.id).subscribe(
-        res => {
+        () => {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['items'], {state: {data: 'User Updated with success'}});
         },
         err => {

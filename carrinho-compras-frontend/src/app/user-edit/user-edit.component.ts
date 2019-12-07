@@ -29,7 +29,8 @@ export class UserEditComponent implements OnInit {
     this.error = null;
     this.route.params.subscribe(params => {
       this.usersService.updateUser(userEmail, userName, params.id).subscribe(
-        res => {
+        () => {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['users'], {state: {data: 'User Updated with success'}});
         },
         err => {

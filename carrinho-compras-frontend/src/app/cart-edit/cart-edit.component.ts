@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CartsService} from '../carts.service';
-import {ItemsService} from '../items.service';
 import {Cart} from '../cart';
-import {CartItem} from '../cart-item';
 
 @Component({
   selector: 'app-cart-edit',
@@ -17,10 +15,8 @@ export class CartEditComponent implements OnInit {
   message: string;
   angForm: FormGroup;
   cart: Cart = new Cart();
-  cartItems: CartItem[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router, private cartService: CartsService, private fb: FormBuilder,
-              private itemsService: ItemsService) {
+  constructor(private route: ActivatedRoute, private router: Router, private cartService: CartsService) {
     const navigation = this.router.getCurrentNavigation();
     if (!navigation.extras.state) {
       return;
@@ -44,7 +40,7 @@ export class CartEditComponent implements OnInit {
   }
 
   closeCart(id) {
-    this.cartService.closeCart(id).subscribe(res => {
+    this.cartService.closeCart(id).subscribe(() => {
         this.message = 'Cart Closed with success';
         this.loadCart(id);
       },

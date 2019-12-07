@@ -32,7 +32,7 @@ export class ItemGetComponent implements OnInit {
   deleteItem(id) {
     this.itemsService.deleteItem(id)
       .subscribe(
-        data => {
+        () => {
           this.fillItems();
           this.message = 'Item Removed with success';
         },
