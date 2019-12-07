@@ -1,7 +1,5 @@
 package rafael.altran.exercicio.carrinhocomprasbackend.controllers;
 
-import lombok.SneakyThrows;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +16,6 @@ class ControllerUtils {
      *
      * @return new ID from the current {@link Date}
      */
-    @SneakyThrows
     static Long createUniqueId() {
         // Avoid that 2 instances saved at same millisecond have the same ID
         return Long.parseLong(ID_DATE_FORMAT.format(new Date())) - ((long) (1000 * Math.random()));

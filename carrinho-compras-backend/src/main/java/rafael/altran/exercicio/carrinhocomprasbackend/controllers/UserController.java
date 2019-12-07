@@ -37,7 +37,7 @@ public class UserController {
     @PostMapping(value = "/", produces = "application/json")
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
         try {
-            user.setId(System.currentTimeMillis());
+            user.setId(ControllerUtils.createUniqueId());
             User savedUser = userRepository.save(user);
             return ResponseEntity.ok().body(savedUser);
         } catch (DuplicateKeyException e) {

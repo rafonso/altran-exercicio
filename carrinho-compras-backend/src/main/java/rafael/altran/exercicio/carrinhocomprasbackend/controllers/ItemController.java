@@ -35,7 +35,7 @@ public class ItemController {
 
     @PostMapping("/")
     public Item create(@Valid @RequestBody Item item) {
-        item.setId(System.currentTimeMillis());
+        item.setId(ControllerUtils.createUniqueId());
         return itemRepository.save(item);
     }
 
