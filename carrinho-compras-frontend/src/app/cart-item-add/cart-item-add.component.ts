@@ -75,6 +75,7 @@ export class CartItemAddComponent implements OnInit {
       console.log(this.cartService);
       this.cartService.updateCart(this.cart).subscribe(
         () => {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate([`cart/edit/${this.cart.id}`], {state: {data: 'Item Added with success'}});
         },
         err => {

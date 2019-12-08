@@ -1,3 +1,4 @@
+<h1>EDIT CART</h1>
 <div *ngIf="message" class="alert alert-success" role="alert">
   {{ message }}
 </div>
@@ -7,11 +8,14 @@
 <div class="card">
   <div class="card-body">
     <div>
-      <label class="col-md-4">User: </label>
-      <input type="text" class="form-control" readonly *ngIf="cart.user"
+      <label class="col-md-4" for="cartId">ID: </label>
+      <input id="cartId" type="text" class="form-control" readonly *ngIf="cart.id"
+             value="{{cart.id}}">
+      <label class="col-md-4" for="cartUserName">User: </label>
+      <input id="cartUserName" type="text" class="form-control" readonly *ngIf="cart.user"
              value="{{cart.user.name}} ({{cart.user.email}})">
-      <label class="col-md-4">Status: </label>
-      <input type="text" class="form-control" readonly *ngIf="cart.status"
+      <label class="col-md-4" for="cartStatus">Status: </label>
+      <input id="cartStatus" type="text" class="form-control" readonly *ngIf="cart.status"
              value="{{cart.status}}">
     </div>
   </div>
@@ -30,7 +34,7 @@
       <th>Item Value</th>
       <th>Item Quantity</th>
       <th>Subtotal</th>
-      <th colspan="2" *ngIf="cart.status === 'OPEN'">Actions</th>
+      <th colspan="2" class="text-center" *ngIf="cart.status === 'OPEN'">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -39,10 +43,12 @@
       <td style="text-align: right">{{cartItem.item.value| number: '.2-2'}}</td>
       <td style="text-align: right">{{cartItem.quantity}}</td>
       <td style="text-align: right">{{cartItem.itemValue| number: '.2-2'}}</td>
-      <td *ngIf="cart.status === 'OPEN'">
+      <td class="text-center" *ngIf="cart.status === 'OPEN'">
         <a [routerLink]="['/cart-item/edit', cart.id, cartItem.id]" class="btn btn-primary">Edit</a>
       </td>
-      <td *ngIf="cart.status === 'OPEN'"><a (click)="deleteItemCart(cartItem.id)" class="btn btn-danger">Delete</a></td>
+      <td class="text-center" *ngIf="cart.status === 'OPEN'">
+        <a (click)="deleteItemCart(cartItem.id)" class="btn btn-danger">Delete</a>
+      </td>
     </tr>
     </tbody>
     <tfoot>

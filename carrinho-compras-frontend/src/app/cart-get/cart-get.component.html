@@ -1,3 +1,4 @@
+<h1>CARTS</h1>
 <div *ngIf="message" class="alert alert-success" role="alert">
   {{ message }}
 </div>
@@ -7,11 +8,18 @@
 <table class="table table-hover">
   <thead>
   <tr>
+    <td colspan="6" class="text-right">
+      <a routerLink="/cart/create" class="btn btn-primary" routerLinkActive="active">
+        Create Cart
+      </a>
+    </td>
+  </tr>
+  <tr>
     <th>Cart Id</th>
     <th>User</th>
     <th>Total Value</th>
     <th>Status</th>
-    <th colspan="2">Actions</th>
+    <th colspan="2" class="text-center">Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -19,16 +27,14 @@
     <td>{{ cart.id }}</td>
     <td>{{ cart.user.email }} ({{ cart.user.name }})</td>
     <td style="text-align: right">{{cart.cartValue| number: '.2-2'}}</td>
-    <td>{{cart.status}}</td>
-    <td><a [routerLink]="['../cart/edit', cart.id]" class="btn btn-primary">
-      {{cart.status == 'OPEN' ? 'Edit' : 'View'}}
-    </a></td>
-    <td>
-<!--
-
-      <a (click)="deleteCart(cart.id)" class="btn btn-danger" disabled="true">Delete</a>
-
--->
+    <td class="text-center">{{cart.status}}</td>
+    <td class="text-center">
+      <a [routerLink]="['../cart/edit', cart.id]" class="btn btn-primary">
+        {{cart.status == 'OPEN' ? 'Edit' : 'View'}}
+      </a>
+    </td>
+    <td class="text-center">
+      <a (click)="deleteCart(cart.id)" class="btn btn-danger">Delete</a>
     </td>
   </tr>
   </tbody>

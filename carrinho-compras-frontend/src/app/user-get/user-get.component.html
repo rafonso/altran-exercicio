@@ -1,3 +1,4 @@
+<h1>USERS</h1>
 <div *ngIf="message" class="alert alert-success" role="alert">
   {{ message }}
 </div>
@@ -7,9 +8,16 @@
 <table class="table table-hover">
   <thead>
   <tr>
-    <td>User Email</td>
-    <td>User Name</td>
-    <td colspan="2">Actions</td>
+    <td colspan="4" class="text-right">
+      <a routerLink="/user/create" class="btn btn-primary" routerLinkActive="active">
+        Create User
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>User Email</th>
+    <th>User Name</th>
+    <th colspan="2" class="text-center">Actions</th>
   </tr>
   </thead>
 
@@ -17,8 +25,8 @@
   <tr *ngFor="let user of users">
     <td>{{ user.email }}</td>
     <td>{{ user.name }}</td>
-    <td><a [routerLink]="['../user/edit', user.id]" class="btn btn-primary">Edit</a></td>
-    <td><a (click)="deleteUser(user.id)" class="btn btn-danger">Delete</a></td>
+    <td class="text-center"><a [routerLink]="['../user/edit', user.id]" class="btn btn-primary">Edit</a></td>
+    <td class="text-center"><a (click)="deleteUser(user.id)" class="btn btn-danger">Delete</a></td>
   </tr>
   </tbody>
 </table>

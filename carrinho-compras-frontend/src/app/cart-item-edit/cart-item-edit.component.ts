@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Cart} from '../cart';
-import {Item} from '../item';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CartsService} from '../carts.service';
 import {Utils} from '../utils';
@@ -18,7 +17,6 @@ export class CartItemEditComponent implements OnInit {
   angForm: FormGroup;
   cart: Cart = new Cart();
   cartItem: CartItem = new CartItem();
-  cartId = 0;
 
   constructor(private route: ActivatedRoute, private router: Router, private fb: FormBuilder, private cartService: CartsService) {
     this.createForm();
@@ -49,6 +47,7 @@ export class CartItemEditComponent implements OnInit {
     this.cartItem.quantity = quantity;
     this.cartService.updateCart(this.cart).subscribe(
       () => {
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigate([`cart/edit/${this.cart.id}`], {state: {data: 'Item Updated with success'}});
       },
       err => {

@@ -1,3 +1,4 @@
+<h1>ADD ITEM OF CART {{cart.id}}</h1>
 <div class="card">
   <div *ngIf="error" class="alert alert-danger" role="alert">
     {{ error }}
@@ -5,13 +6,13 @@
   <div class="card-body">
     <form [formGroup]="angForm" novalidate>
       <div class="form-group">
-        <label class="col-md-4">Item</label>
-        <input type="text" class="form-control" readonly
+        <label class="col-md-4" for="item">Item</label>
+        <input id="item" type="text" class="form-control" readonly
                value="{{cartItem.item.name}} ($ {{cartItem.item.value | number: '.2-2'}})">
       </div>
       <div class="form-group">
-        <label class="col-md-4">Quantity</label>
-        <input type="number" min="0" step="1" class="form-control" formControlName="quantity" #quantity
+        <label class="col-md-4" for="quantity">Quantity</label>
+        <input id="quantity" type="number" min="0" step="1" class="form-control" formControlName="quantity" #quantity
                value="{{cartItem.quantity}}">
       </div>
       <div
@@ -21,12 +22,12 @@
           A positive quantity is required.
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group text-right">
+        <a [routerLink]="['/cart/edit', cart.id]" class="btn btn-primary mr-2"> Return to Cart </a>
         <button (click)="updateCartItem(quantity.value)"
-                type="submit" class="btn btn-primary mr-2" [disabled]="angForm.pristine || angForm.invalid">
+                type="submit" class="btn btn-primary ml-2" [disabled]="angForm.pristine || angForm.invalid">
           Update Item
         </button>
-        <a [routerLink]="['/cart/edit', cart.id]" class="btn btn-primary ml-2"> Return to Cart </a>
       </div>
     </form>
   </div>

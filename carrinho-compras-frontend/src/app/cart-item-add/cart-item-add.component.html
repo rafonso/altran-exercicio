@@ -1,3 +1,4 @@
+<h1>ADD ITEM TO CART {{cart.id}}</h1>
 <div class="card">
   <div *ngIf="error" class="alert alert-danger" role="alert">
     {{ error }}
@@ -5,8 +6,8 @@
   <div class="card-body">
     <form [formGroup]="angForm" novalidate>
       <div class="form-group">
-        <label class="col-md-4">Item</label>
-        <select class="form-control" formControlName="itemId" #itemId>
+        <label class="col-md-4" for="itemId">Item</label>
+        <select id="itemId" class="form-control" formControlName="itemId" #itemId>
           <option value=""></option>
           <option *ngFor="let item of items" value="{{item.id}}">
             {{item.name}} ($ {{item.value | number: '.2-2'}})
@@ -21,8 +22,8 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-md-4">Quantity</label>
-        <input type="number" min="0" step="1" class="form-control" formControlName="quantity" #quantity>
+        <label class="col-md-4" for="quantity">Quantity</label>
+        <input id="quantity" type="number" min="0" step="1" class="form-control" formControlName="quantity" #quantity>
       </div>
       <div
         *ngIf="angForm.controls['quantity'].invalid && (angForm.controls['quantity'].dirty || angForm.controls['quantity'].touched)"
@@ -31,13 +32,13 @@
           A positive quantity is required.
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group text-right">
+        <a [routerLink]="['/cart/edit', cart.id]" class="btn btn-primary mr-2"> Return to Cart </a>
         <button
           (click)="addCartItem(itemId.value, quantity.value)"
-          type="submit" class="btn btn-primary mr-2" [disabled]="angForm.pristine || angForm.invalid">
+          type="submit" class="btn btn-primary ml-2" [disabled]="angForm.pristine || angForm.invalid">
           Add Item
         </button>
-        <a [routerLink]="['/cart/edit', cart.id]" class="btn btn-primary ml-2"> Return to Cart </a>
       </div>
     </form>
   </div>

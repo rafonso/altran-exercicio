@@ -41,7 +41,7 @@ export class CartEditComponent implements OnInit {
     // tslint:disable-next-line:triple-equals
     this.cart.cartItems = this.cart.cartItems.filter(ci => ci.id != itemCartId);
     this.cartService.updateCart(this.cart).subscribe(
-      res => {
+      () => {
         this.loadCart(this.cart.id);
         this.message = 'Item removed with Success';
       },
