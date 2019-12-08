@@ -325,7 +325,7 @@ public class UserControllerTest {
     public void deleteUserWithCartAssociate() throws Exception {
         Item i = itemRepository.save(new Item(1_000L, "User Item", BigDecimal.TEN));
         CartItem ci = cartItemRepository.save(new CartItem(2_000L, i, 1));
-        Cart c = cartRepository.save(new Cart(10000L, captainAmerica, Collections.singletonList(ci), CartStatus.OPEN));
+        cartRepository.save(new Cart(10000L, captainAmerica, Collections.singletonList(ci), CartStatus.OPEN));
 
         mvc.perform(delete(URL + captainAmerica.getId()))
                 .andExpect(status().isBadRequest())

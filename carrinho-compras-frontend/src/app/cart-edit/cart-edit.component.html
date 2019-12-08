@@ -1,4 +1,4 @@
-<h1>EDIT CART</h1>
+<h1>{{(cart.status == 'OPEN') ? 'EDIT' : 'VIEW'}} CART</h1>
 <div *ngIf="message" class="alert alert-success" role="alert">
   {{ message }}
 </div>
