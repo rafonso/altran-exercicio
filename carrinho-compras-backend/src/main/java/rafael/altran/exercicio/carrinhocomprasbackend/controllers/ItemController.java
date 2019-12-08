@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 @CrossOrigin("*")
 public class ItemController {
 
-    public static final String MSG_ITEM_IN_CARTS = "It is not possible remove Item because there is Carts associated to it.";
+    public static final String MSG_ITEM_IN_CARTS = "It is not possible remove Item because there are Carts associated to it.";
 
     @Autowired
     private ItemRepository itemRepository;

@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin("*")
 public class UserController {
 
-    public static final String MSG_USER_IN_CARTS = "It is not possible remove User because there is Carts associated to him.";
+    public static final String MSG_USER_IN_CARTS = "It is not possible remove User because there are Carts associated to him.";
 
     @Autowired
     private UserRepository userRepository;
