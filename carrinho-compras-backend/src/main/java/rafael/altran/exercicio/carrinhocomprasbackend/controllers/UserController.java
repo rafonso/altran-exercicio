@@ -27,6 +27,22 @@ public class UserController {
     @Autowired
     private CartRepository cartRepository;
 
+    private ResponseEntity<User> getUserResponseEntity(User receivedUser, User storedUser) {
+        storedUser.setEmail(receivedUser.getEmail());
+        storedUser.setName(receivedUser.getName());
+        User savedUser = userRepository.save(storedUser);
+        return ResponseEntity.ok().body(savedUser);
+    }
+
+    private ResponseEntity<Object> deleteUser(Long id, User storedUser) {
+        if (cartRepository.countByUser(storedUser) > 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_USER_IN_CARTS);
+        }
+
+        userRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/")
     public List<User> getAll() {
         Sort sortByEmail = new Sort(Sort.Direction.ASC, "email");
@@ -55,12 +71,7 @@ public class UserController {
     public ResponseEntity<User> update(@PathVariable("id") Long id, @Valid @RequestBody User user) {
         try {
             return userRepository.findById(id)
-                    .map(u -> {
-                        u.setEmail(user.getEmail());
-                        u.setName(user.getName());
-                        User savedUser = userRepository.save(u);
-                        return ResponseEntity.ok().body(savedUser);
-                    })
+                    .map(u -> getUserResponseEntity(user, u))
                     .orElse(ResponseEntity.notFound().build());
         } catch (DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail already registered to another User", e);
@@ -70,14 +81,8 @@ public class UserController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return userRepository.findById(id)
-                .map(user -> {
-                    if (cartRepository.countByUser(user) > 0) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_USER_IN_CARTS);
-                    }
-
-                    userRepository.deleteById(id);
-                    return ResponseEntity.ok().build();
-                }).orElse(ResponseEntity.notFound().build());
+                .map(user -> deleteUser(id, user))
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

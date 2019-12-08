@@ -53,6 +53,33 @@ public class CartController {
         return consolidatedItems;
     }
 
+    private ResponseEntity<Cart> updateCart(Cart receivedCart, Cart storedCart) {
+        validateOpenCart(storedCart);
+        // Delete Removed Cart Items
+        storedCart.getCartItems().stream()
+                .filter(ci -> !receivedCart.getCartItems().contains(ci))
+                .forEach(cartItemRepository::delete);
+        storedCart.setCartItems(consolidateItems(receivedCart.getCartItems()));
+        // Fill IDs of new Cart Items
+        storedCart.getCartItems().stream()
+                .filter(ci -> Objects.isNull(ci.getId()))
+                .forEach(ci -> ci.setId(ControllerUtils.createUniqueId()));
+
+        cartItemRepository.saveAll(storedCart.getCartItems());
+        cartRepository.save(storedCart);
+
+        return this.getById(storedCart.getId());
+    }
+
+    private ResponseEntity<Cart> closeCart(Cart storedCart) {
+        validateOpenCart(storedCart);
+
+        storedCart.setStatus(CartStatus.CLOSED);
+        cartRepository.save(storedCart);
+
+        return this.getById(storedCart.getId());
+    }
+
     @GetMapping("/")
     public List<Cart> getAll() {
         List<Cart> carts = cartRepository.findAll();
@@ -90,35 +117,14 @@ public class CartController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<Cart> update(@PathVariable("id") Long id, @Valid @RequestBody Cart cart) {
         return cartRepository.findById(id)
-                .map(c -> {
-                    validateOpenCart(c);
-                    // Delete Removed Cart Items
-                    c.getCartItems().stream()
-                            .filter(ci -> !cart.getCartItems().contains(ci))
-                            .forEach(cartItemRepository::delete);
-                    c.setCartItems(consolidateItems(cart.getCartItems()));
-                    // Fill IDs of new Cart Items
-                    c.getCartItems().stream().filter(ci -> Objects.isNull(ci.getId())).forEach(ci -> ci.setId(ControllerUtils.createUniqueId()));
-
-                    cartItemRepository.saveAll(c.getCartItems());
-                    cartRepository.save(c);
-
-                    return this.getById(c.getId());
-                })
+                .map(c -> updateCart(cart, c))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping(value = "/close/{id}")
     public ResponseEntity<Cart> close(@PathVariable("id") Long id) {
         return cartRepository.findById(id)
-                .map(c -> {
-                    validateOpenCart(c);
-
-                    c.setStatus(CartStatus.CLOSED);
-                    cartRepository.save(c);
-
-                    return this.getById(c.getId());
-                })
+                .map(this::closeCart)
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -127,7 +133,6 @@ public class CartController {
         return cartRepository.findById(id)
                 .map(cart -> {
                     cartRepository.deleteById(id);
-
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
