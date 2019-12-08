@@ -14,10 +14,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import rafael.altran.exercicio.carrinhocomprasbackend.models.User;
+import rafael.altran.exercicio.carrinhocomprasbackend.models.*;
+import rafael.altran.exercicio.carrinhocomprasbackend.repositories.CartItemRepository;
+import rafael.altran.exercicio.carrinhocomprasbackend.repositories.CartRepository;
+import rafael.altran.exercicio.carrinhocomprasbackend.repositories.ItemRepository;
 import rafael.altran.exercicio.carrinhocomprasbackend.repositories.UserRepository;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -41,10 +46,13 @@ public class UserControllerTest {
     private static final String JSON_FORMAT = "{\"email\":\"%s\",\"name\":\"%s\"}";
     private static final String URL = "/shopping/user/";
 
+    private final User captainAmerica = new User(10L, "steve.rogers@avengers.com", "Captain America");
+    private final User spiderMan = new User(20L, "peter.parker@marvel.com", "Spider Man");
+    private final User terminator = new User(30L, "arnold.schwarznegger@rambo.com", "Terminator");
     private List<User> storedUsers = Arrays.asList(
-            new User(10L, "steve.rogers@avengers.com", "Captain America"),
-            new User(20L, "peter.parker@marvel.com", "Spider Man"),
-            new User(30L, "arnold.schwarznegger@rambo.com", "Terminator")
+            captainAmerica,
+            spiderMan,
+            terminator
     );
 
     @Autowired
@@ -52,6 +60,15 @@ public class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
+    
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -63,6 +80,9 @@ public class UserControllerTest {
 
     @AfterEach
     public void cleanData() {
+        cartRepository.deleteAll();
+        cartItemRepository.deleteAll();
+        itemRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -74,9 +94,9 @@ public class UserControllerTest {
         mvc.perform(get(URL).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].id", is(storedUsers.get(2).getId().intValue())))
-                .andExpect(jsonPath("$[1].id", is(storedUsers.get(1).getId().intValue())))
-                .andExpect(jsonPath("$[2].id", is(storedUsers.get(0).getId().intValue())));
+                .andExpect(jsonPath("$[0].id", is(terminator.getId().intValue())))
+                .andExpect(jsonPath("$[1].id", is(spiderMan.getId().intValue())))
+                .andExpect(jsonPath("$[2].id", is(captainAmerica.getId().intValue())));
     }
 
     // getAll() - END
@@ -95,13 +115,13 @@ public class UserControllerTest {
     @Test
     @DisplayName("Find By Id With ID Present")
     public void getByIdPresent() throws Exception {
-        Long id = storedUsers.get(0).getId();
+        Long id = captainAmerica.getId();
 
         mvc.perform(get(URL + id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(storedUsers.get(0).getId().intValue())))
-                .andExpect(jsonPath("$.email", is(storedUsers.get(0).getEmail())))
-                .andExpect(jsonPath("$.name", is(storedUsers.get(0).getName())));
+                .andExpect(jsonPath("$.id", is(captainAmerica.getId().intValue())))
+                .andExpect(jsonPath("$.email", is(captainAmerica.getEmail())))
+                .andExpect(jsonPath("$.name", is(captainAmerica.getName())));
     }
 
     // getById() - END
@@ -155,7 +175,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("Create With Repeated email, filled Name")
     public void createWithRepeatedEmailFilledName() throws Exception {
-        String email = storedUsers.get(0).getEmail();
+        String email = captainAmerica.getEmail();
         String name = "New User";
         String json = String.format(JSON_FORMAT, email, name);
 
@@ -227,7 +247,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("Update with Present User Id filled, invalid email")
     public void updateWithPresentUserIdInvalidEmail() throws Exception {
-        Long id = storedUsers.get(0).getId();
+        Long id = captainAmerica.getId();
         String email = "fooemailcom";
         String name = "Foo Boo";
         String json = String.format(JSON_FORMAT, email, name);
@@ -240,8 +260,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("Update with Present User Id filled, Another User email")
     public void updateWithPresentUserIdAnotherUserEmail() throws Exception {
-        Long id = storedUsers.get(0).getId();
-        String email = storedUsers.get(2).getEmail();
+        Long id = captainAmerica.getId();
+        String email = terminator.getEmail();
         String name = "Foo Boo";
         String json = String.format(JSON_FORMAT, email, name);
 
@@ -253,7 +273,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("Update with Present User Id filled, valid Properties")
     public void updateWithPresentUserIdValidProperties() throws Exception {
-        Long id = storedUsers.get(0).getId();
+        Long id = captainAmerica.getId();
         String email = "foo@email.com";
         String name = "Foo Boo";
         String json = String.format(JSON_FORMAT, email, name);
@@ -264,7 +284,7 @@ public class UserControllerTest {
         String contentAsString = result.getResponse().getContentAsString();
         User newUser = objectMapper.readValue(contentAsString, User.class);
 
-        assertEquals(storedUsers.get(0).getId(), newUser.getId());
+        assertEquals(captainAmerica.getId(), newUser.getId());
         assertEquals(email, newUser.getEmail());
         assertEquals(name, newUser.getName());
     }
@@ -274,7 +294,7 @@ public class UserControllerTest {
     // delete() - START
 
     @Test
-    @DisplayName("Delete without User Id")
+    @DisplayName("Delete Without Id")
     public void deleteWithoutUserId() throws Exception {
         mvc.perform(delete(URL)) // .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isMethodNotAllowed())
@@ -282,7 +302,7 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Delete with Not Present User Id")
+    @DisplayName("Delete User not Present")
     public void deleteWithNotPresentId() throws Exception {
         mvc.perform(delete(URL + 2))
                 .andExpect(status().isNotFound())
@@ -290,14 +310,26 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("Delete with  Present User Id")
+    @DisplayName("Delete User Present")
     public void deleteWithPresentId() throws Exception {
-        mvc.perform(delete(URL + storedUsers.get(0).getId()))
+        mvc.perform(delete(URL + captainAmerica.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
 
-        mvc.perform(get(URL + storedUsers.get(0).getId()).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get(URL + captainAmerica.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Delete User associate with cart")
+    public void deleteUserWithCartAssociate() throws Exception {
+        Item i = itemRepository.save(new Item(1_000L, "User Item", BigDecimal.TEN));
+        CartItem ci = cartItemRepository.save(new CartItem(2_000L, i, 1));
+        Cart c = cartRepository.save(new Cart(10000L, captainAmerica, Collections.singletonList(ci), CartStatus.OPEN));
+
+        mvc.perform(delete(URL + captainAmerica.getId()))
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason(UserController.MSG_USER_IN_CARTS));
     }
 
     // delete() - END

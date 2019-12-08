@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import rafael.altran.exercicio.carrinhocomprasbackend.models.User;
+import rafael.altran.exercicio.carrinhocomprasbackend.repositories.CartRepository;
 import rafael.altran.exercicio.carrinhocomprasbackend.repositories.UserRepository;
 
 import javax.validation.Valid;
@@ -18,8 +19,13 @@ import java.util.List;
 @CrossOrigin("*")
 public class UserController {
 
+    public static final String MSG_USER_IN_CARTS = "It is not possible remove User because there is Carts associated to him.";
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @GetMapping("/")
     public List<User> getAll() {
@@ -65,6 +71,10 @@ public class UserController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return userRepository.findById(id)
                 .map(user -> {
+                    if (cartRepository.countByUser(user) > 0) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_USER_IN_CARTS);
+                    }
+
                     userRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());

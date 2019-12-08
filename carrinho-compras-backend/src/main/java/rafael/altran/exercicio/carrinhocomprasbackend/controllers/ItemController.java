@@ -1,24 +1,32 @@
 package rafael.altran.exercicio.carrinhocomprasbackend.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import rafael.altran.exercicio.carrinhocomprasbackend.models.CartItem;
 import rafael.altran.exercicio.carrinhocomprasbackend.models.Item;
+import rafael.altran.exercicio.carrinhocomprasbackend.repositories.CartRepository;
 import rafael.altran.exercicio.carrinhocomprasbackend.repositories.ItemRepository;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.function.Predicate;
 
 @RestController
 @RequestMapping("/shopping/item")
 @CrossOrigin("*")
 public class ItemController {
 
-    private final ItemRepository itemRepository;
+    public static final String MSG_ITEM_IN_CARTS = "It is not possible remove Item because there is Carts associated to it.";
 
-    public ItemController(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
-    }
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @GetMapping("/")
     public List<Item> getAll() {
@@ -55,6 +63,14 @@ public class ItemController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         return itemRepository.findById(id)
                 .map(item -> {
+                    // Verify is there is any Cart associate with this item
+                    if (cartRepository.findAllBy()
+                            .flatMap(c -> c.getCartItems().stream())
+                            .map(CartItem::getItem)
+                            .anyMatch(Predicate.isEqual(item))) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MSG_ITEM_IN_CARTS);
+                    }
+
                     itemRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());

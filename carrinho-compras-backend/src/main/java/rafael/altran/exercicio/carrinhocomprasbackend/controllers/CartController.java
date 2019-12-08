@@ -11,21 +11,17 @@ import rafael.altran.exercicio.carrinhocomprasbackend.repositories.CartRepositor
 
 import javax.validation.Valid;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/shopping/cart")
 @CrossOrigin("*")
 public class CartController {
 
-    private final CartRepository cartRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
-    private final CartItemRepository cartItemRepository;
-
-    public CartController(CartRepository cartRepository, CartItemRepository cartItemRepository) {
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-    }
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     private void sortCartItems(Cart cart) {
         cart.getCartItems().sort(Comparator.comparing(ci -> ci.getItem().getName()));
