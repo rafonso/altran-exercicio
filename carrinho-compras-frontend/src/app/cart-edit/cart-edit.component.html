@@ -18,9 +18,9 @@
 
   <table class="table table-hover">
     <thead>
-    <tr>
-      <td colspan="6" style="text-align: right" *ngIf="cart.status === 'OPEN'">
-        <a class="btn btn-primary">
+    <tr *ngIf="cart.status === 'OPEN'">
+      <td colspan="6" style="text-align: right">
+        <a [routerLink]="['/cart-item/create/', cart.id]" class="btn btn-primary">
           Add Item
         </a>
       </td>
@@ -39,8 +39,10 @@
       <td style="text-align: right">{{cartItem.item.value| number: '.2-2'}}</td>
       <td style="text-align: right">{{cartItem.quantity}}</td>
       <td style="text-align: right">{{cartItem.itemValue| number: '.2-2'}}</td>
-      <td *ngIf="cart.status === 'OPEN'"><a class="btn btn-primary">Edit</a></td>
-      <td *ngIf="cart.status === 'OPEN'"><a class="btn btn-danger">Delete</a></td>
+      <td *ngIf="cart.status === 'OPEN'">
+        <a [routerLink]="['/cart-item/edit', cart.id, cartItem.id]" class="btn btn-primary">Edit</a>
+      </td>
+      <td *ngIf="cart.status === 'OPEN'"><a (click)="deleteItemCart(cartItem.id)" class="btn btn-danger">Delete</a></td>
     </tr>
     </tbody>
     <tfoot>

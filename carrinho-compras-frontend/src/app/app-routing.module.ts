@@ -9,6 +9,8 @@ import {ItemGetComponent} from './item-get/item-get.component';
 import {CartAddComponent} from './cart-add/cart-add.component';
 import {CartEditComponent} from './cart-edit/cart-edit.component';
 import {CartGetComponent} from './cart-get/cart-get.component';
+import {CartItemAddComponent} from './cart-item-add/cart-item-add.component';
+import {CartItemEditComponent} from './cart-item-edit/cart-item-edit.component';
 
 
 const routes: Routes = [
@@ -47,6 +49,14 @@ const routes: Routes = [
   {
     path: 'carts',
     component: CartGetComponent
+  },
+  {
+    path: 'cart-item/create/:cartId',
+    component: CartItemAddComponent
+  },
+  {
+    path: 'cart-item/edit/:cartId/:itemCartId',
+    component: CartItemEditComponent
   }
 ];
 

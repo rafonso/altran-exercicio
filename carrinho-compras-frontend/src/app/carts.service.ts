@@ -33,6 +33,10 @@ export class CartsService {
     return this.http.put<Cart>(`${this.uri}close/${id}`, {});
   }
 
+  updateCart(cart) {
+    return this.http.put<Cart>(`${this.uri}${cart.id}`, cart);
+  }
+
   deleteCart(id) {
     return this.http.delete(`${this.uri}${id}`);
   }

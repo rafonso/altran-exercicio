@@ -3,6 +3,7 @@ import {FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CartsService} from '../carts.service';
 import {Cart} from '../cart';
+import {Utils} from '../utils';
 
 @Component({
   selector: 'app-cart-edit',
@@ -29,12 +30,23 @@ export class CartEditComponent implements OnInit {
     this.cartService.editCart(id).subscribe(
       res => {
         this.cart = res;
-        // this.cartItems = this.cart.cartItems;
-        // console.log(this.cart);
       },
       err => {
-        console.error(err);
-        this.error = err.message;
+        this.error = Utils.handleError(err);
+      }
+    );
+  }
+
+  deleteItemCart(itemCartId) {
+    // tslint:disable-next-line:triple-equals
+    this.cart.cartItems = this.cart.cartItems.filter(ci => ci.id != itemCartId);
+    this.cartService.updateCart(this.cart).subscribe(
+      res => {
+        this.loadCart(this.cart.id);
+        this.message = 'Item removed with Success';
+      },
+      err => {
+        this.error = Utils.handleError(err);
       }
     );
   }

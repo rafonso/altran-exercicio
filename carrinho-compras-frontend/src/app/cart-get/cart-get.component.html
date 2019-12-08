@@ -23,7 +23,13 @@
     <td><a [routerLink]="['../cart/edit', cart.id]" class="btn btn-primary">
       {{cart.status == 'OPEN' ? 'Edit' : 'View'}}
     </a></td>
-    <td><a (click)="deleteCart(cart.id)" class="btn btn-danger">Delete</a></td>
+    <td>
+<!--
+
+      <a (click)="deleteCart(cart.id)" class="btn btn-danger" disabled="true">Delete</a>
+
+-->
+    </td>
   </tr>
   </tbody>
 </table>
